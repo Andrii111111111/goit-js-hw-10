@@ -4,8 +4,11 @@ const fotoDiv = document.querySelector('.cat-info');
 // const selectElement = document.querySelector('.breed-select');
 const options = {
   method: 'GET',
+  api_key:
+    'live_SG6chukU8EBugubL4otSUjuN1o5sFWslgv4YLx7Gm782NeUW5OYBEnbcWOImIoPQ',
+  breed_ids: select.value,
 };
-fetch('https://api.thecatapi.com/v1/breeds', options)
+fetch('https://api.thecatapi.com/v1/breeds')
   .then(response => {
     if (!response.ok) {
       throw new Error(response.statusText);
@@ -16,9 +19,6 @@ fetch('https://api.thecatapi.com/v1/breeds', options)
 
   .then(data => {
     select.insertAdjacentHTML('afterbegin', createMarkup(data));
-    select.addEventListener('change', event => {
-      fotoDiv.insertAdjacentHTML('afterbegin', createMarkup3(data));
-    });
   })
   .catch(err => {
     console.log(err);
@@ -40,7 +40,7 @@ function createMarkup2(arr) {
 function createMarkup3(arr) {
   return arr
     .map(
-      ({ description, name, temperament }) => `
+      ({ description, name, temperament, id }) => `
       <div class="text">
   <h2>${name}</h2>
   <p>${description}</p>
@@ -54,9 +54,10 @@ select.addEventListener('change', currentCats);
 
 function currentCats(evt) {
   const breed = select.value;
+  // console.log(breed);
+  // console.log(fetch);
   fetch(
-    `https://api.thecatapi.com/v1/images/search?breed_ids=${breed}`,
-    options
+    `https://api.thecatapi.com/v1/images/search?breed_ids=${breed}&api_key=live_SG6chukU8EBugubL4otSUjuN1o5sFWslgv4YLx7Gm782NeUW5OYBEnbcWOImIoPQ`
   )
     .then(response => {
       if (!response.ok) {
@@ -68,5 +69,6 @@ function currentCats(evt) {
     .then(data => {
       console.log(data);
       fotoDiv.insertAdjacentHTML('afterbegin', createMarkup2(data));
+      fotoDiv.insertAdjacentHTML('afterbegin', createMarkup3(data));
     });
 }
