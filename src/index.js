@@ -1,7 +1,16 @@
-let id;
+import SlimSelect from 'slim-select';
+new SlimSelect({
+  select: '#selectElement',
+  // settings: {
+  //   contentPosition: 'relative',
+  //   contentLocation: document.getElementById('local'),
+  // },
+});
+
 const select = document.querySelector('.breed-select');
 const fotoDiv = document.querySelector('.cat-info');
-// const selectElement = document.querySelector('.breed-select');
+const spanStyle = document.querySelector('.span');
+
 const options = {
   method: 'GET',
   api_key:
@@ -29,33 +38,11 @@ function createMarkup(arr) {
     .map(({ id, name }) => `<option value="${id}">${name}</option>`)
     .join('');
 }
-function createMarkup2(arr) {
-  return arr
-    .map(
-      ({ url }) => `<img src="${url}" alt=" " width="300" height="300"></img>`
-    )
-    .join('');
-}
-
-function createMarkup3(arr) {
-  return arr
-    .map(
-      ({ description, name, temperament, id }) => `
-      <div class="text">
-  <h2>${name}</h2>
-  <p>${description}</p>
-  <p>${temperament}</p>
-</div>`
-    )
-    .join('');
-}
 
 select.addEventListener('change', currentCats);
 
 function currentCats(evt) {
   const breed = select.value;
-  // console.log(breed);
-  // console.log(fetch);
   fetch(
     `https://api.thecatapi.com/v1/images/search?breed_ids=${breed}&api_key=live_SG6chukU8EBugubL4otSUjuN1o5sFWslgv4YLx7Gm782NeUW5OYBEnbcWOImIoPQ`
   )
@@ -67,8 +54,31 @@ function currentCats(evt) {
       return response.json();
     })
     .then(data => {
-      console.log(data);
-      fotoDiv.insertAdjacentHTML('afterbegin', createMarkup2(data));
-      fotoDiv.insertAdjacentHTML('afterbegin', createMarkup3(data));
+      fotoDiv.innerHTML = createMarkup3(data);
     });
 }
+
+function createMarkup3(arr) {
+  return arr
+    .map(
+      ({ breeds, url }) => `
+      <img src="${url}" alt=" " height="300"></img>
+        <div class="text">
+    <h2>${breeds.map(item => item.name)}</h2>
+    <p>${breeds.map(item => item.description)}</p>
+    <p><span class="span">Temperament: </span>${breeds.map(
+      item => item.temperament
+    )}</p>
+  </div>`
+    )
+    .join('');
+}
+
+select.setAttribute('id', 'selectElement');
+
+// styles
+
+fotoDiv.style.display = 'flex';
+fotoDiv.style.gap = '15px';
+fotoDiv.style.marginTop = '15px';
+// spanStyle.style.fontWeight = '600';
