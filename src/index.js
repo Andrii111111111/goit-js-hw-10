@@ -1,11 +1,11 @@
-import SlimSelect from 'slim-select';
-new SlimSelect({
-  select: '#selectElement',
-  // settings: {
-  //   contentPosition: 'relative',
-  //   contentLocation: document.getElementById('local'),
-  // },
-});
+// import SlimSelect from 'slim-select';
+// new SlimSelect({
+//   select: '#selectElement',
+//   // settings: {
+//   //   contentPosition: 'relative',
+//   //   contentLocation: document.getElementById('local'),
+//   // },
+// });
 
 const select = document.querySelector('.breed-select');
 const fotoDiv = document.querySelector('.cat-info');
