@@ -1,6 +1,7 @@
 import Notiflix from 'notiflix';
 import SlimSelect from 'slim-select';
 import 'slim-select/dist/slimselect.css';
+import { fetchBreeds, options } from './cat-api';
 
 const loader = document.querySelector('.loader');
 const select = document.querySelector('.breed-select');
@@ -8,46 +9,62 @@ const fotoDiv = document.querySelector('.cat-info');
 const load = document.querySelector('.load');
 select.setAttribute('id', 'selectElement');
 
-const options = {
-  BASE_URL: 'https://api.thecatapi.com/v1',
-  END_POINT_BREEDS: '/breeds',
-  END_POINT_IMG: '/images/',
-  API_KEY:
-    'live_SG6chukU8EBugubL4otSUjuN1o5sFWslgv4YLx7Gm782NeUW5OYBEnbcWOImIoPQ',
-};
+// const options = {
+//   BASE_URL: 'https://api.thecatapi.com/v1',
+//   END_POINT_BREEDS: '/breeds',
+//   END_POINT_IMG: '/images/',
+//   API_KEY:
+//     'live_SG6chukU8EBugubL4otSUjuN1o5sFWslgv4YLx7Gm782NeUW5OYBEnbcWOImIoPQ',
+// };
 
-function fetchBreeds() {
-  fetch(`${options.BASE_URL}${options.END_POINT_BREEDS}`)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
+// function fetchBreeds() {
+//   fetch(`${options.BASE_URL}${options.END_POINT_BREEDS}`)
+//     .then(response => {
+//       if (!response.ok) {
+//         throw new Error(response.statusText);
+//       }
 
-      return response.json();
-    })
+//       return response.json();
+//     })
 
-    .then(response => {
-      select.insertAdjacentHTML('afterbegin', createMarkup(response));
-      new SlimSelect({
-        select: '#selectElement',
-      });
-    })
-    .catch(error => {
-      Notiflix.Notify.warning(
-        'Oops! Something went wrong! Try reloading the page!'
-      );
-    })
-    .finally(() => {
-      Notiflix.Notify.info('Loading data, please wait...');
-    });
-}
+//     .then(response => {
+//       select.insertAdjacentHTML('afterbegin', createMarkup(response));
+//       new SlimSelect({
+//         select: '#selectElement',
+//       });
+//     })
+//     .catch(error => {
+//       Notiflix.Notify.warning(
+//         'Oops! Something went wrong! Try reloading the page!'
+//       );
+//     })
+//     .finally(() => {
+//       Notiflix.Notify.info('Loading data, please wait...');
+//     });
+// }
 
 function createMarkup(arr) {
   return arr
     .map(({ id, name }) => `<option value="${id}">${name}</option>`)
     .join('');
 }
-fetchBreeds();
+
+fetchBreeds()
+  .then(response => {
+    select.insertAdjacentHTML('afterbegin', createMarkup(response));
+    new SlimSelect({
+      select: '#selectElement',
+    });
+  })
+  .catch(error => {
+    Notiflix.Notify.warning(
+      'Oops! Something went wrong! Try reloading the page!'
+    );
+  })
+  .finally(() => {
+    Notiflix.Notify.info('Loading data, please wait...');
+  });
+
 select.addEventListener('change', fetchCatByBreed);
 
 function fetchCatByBreed() {
