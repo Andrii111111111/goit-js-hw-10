@@ -7,11 +7,13 @@ export const options = {
 };
 
 export function fetchBreeds() {
-  fetch(`${options.BASE_URL}${options.END_POINT_BREEDS}`).then(response => {
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
+  return fetch(`${options.BASE_URL}${options.END_POINT_BREEDS}`).then(
+    response => {
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
 
-    return response.json();
-  });
+      return response.json();
+    }
+  );
 }
