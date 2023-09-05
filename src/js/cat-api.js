@@ -1,4 +1,4 @@
-export const options = {
+const options = {
   BASE_URL: 'https://api.thecatapi.com/v1',
   END_POINT_BREEDS: '/breeds',
   END_POINT_IMG: '/images/',
@@ -16,4 +16,18 @@ export function fetchBreeds() {
       return response.json();
     }
   );
+}
+
+export function fetchCatByBreed() {
+  const select = document.querySelector('.breed-select');
+  const breedId = select.value;
+  return fetch(
+    `${options.BASE_URL}${options.END_POINT_IMG}search?breed_ids=${breedId}&api_key=${options.API_KEY}`
+  ).then(response => {
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+
+    return response.json();
+  });
 }
